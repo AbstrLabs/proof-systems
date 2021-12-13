@@ -134,6 +134,9 @@ pub struct ConstraintSystem<F: FftField> {
     /// EC point addition selector evaluations w over domain.d8
     #[serde_as(as = "o1_utils::serialization::SerdeAs")]
     pub endomul_scalar8: E<F, D<F>>,
+    /// nnmulm constraint selector polynomial
+    #[serde_as(as = "o1_utils::serialization::SerdeAs")]
+    pub nnmulm: DP<F>,
 
     // Constant polynomials
     // --------------------
@@ -442,7 +445,6 @@ impl<F: FftField + SquareRootField> ConstraintSystem<F> {
             domain.d1,
         )
         .interpolate();
-
         // generic constraint polynomials
 
         let genericm = E::<F, D<F>>::from_vec_and_domain(
@@ -481,6 +483,11 @@ impl<F: FftField + SquareRootField> ConstraintSystem<F> {
                 Some(a)
             }
         };
+        let nnmulm = E::<F, D<F>>::from_vec_and_domain(
+            gates.iter().map(|gate| gate.nnmul()).collect(),
+            domain.d1,
+        )
+        .interpolate();
 
         let coefficientsm: [_; COLUMNS] = array_init(|i| {
             E::<F, D<F>>::from_vec_and_domain(
@@ -600,6 +607,7 @@ impl<F: FftField + SquareRootField> ConstraintSystem<F> {
             mulm,
             emull,
             emulm,
+            nnmulm,
             l1,
             l04,
             l08,
