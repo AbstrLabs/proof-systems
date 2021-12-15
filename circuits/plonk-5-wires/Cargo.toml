@@ -15,7 +15,7 @@ oracle = { path = "../../oracle" }
 rand_core = { version = "0.5" }
 array-init = { version = "1.0.0" }
 rayon = { version = "1" }
-blake2 = "0.7"
+blake2 = "0.8"
 
 num-derive = "0.3"
 num-traits = "0.2"
